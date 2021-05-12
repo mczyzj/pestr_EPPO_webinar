@@ -188,13 +188,13 @@ class: split-10
 .column.bg-indigo[.content[
   .split-three.border-white[
   .row[.content.vmiddle[
-  <font size="6" color = "white"> <b>R</b> Package to make batch queries for <a href = "https://data.eppo.int">EPPO Data Services.</a></font>
+  <font size="6" color = "white"><i class="fab fa-r-project"></i> Package to make batch queries for <a href = "https://data.eppo.int">EPPO Data Services.</a></font>
   ]]
   .row[.content.vmiddle[
   <font size="6" color = "white">Only most basic skills needed.</font>
   ]]
   .row[.content.vmiddle[
-  <font size="6" color = "white">Output can be easily processed with <b>R</b> or dumped into spreadsheet.</font>
+  <font size="6" color = "white">Output can be easily processed with <i class="fab fa-r-project"></i> or dumped into spreadsheet.</font>
   ]]
 ]]]
 
@@ -311,9 +311,10 @@ class: split-10
   .row[.content[
 <font size="6" color = "white">Initial setup</font>
 ```{r eval = FALSE, echo = TRUE}
-{{ pestr::eppo_database_download() }}
-eppoDB <- pestr::eppo_database_connect(filename = "eppocodes.sqlite")
-eppo_token <- pestr::create_eppo_token("your_eppo_token")
+{{ library("pestr") }}
+{{ eppo_database_download() }}
+eppoDB <- eppo_database_connect(filename = "eppocodes.sqlite")
+eppo_token <- create_eppo_token("your_eppo_token")
 ```
   ]]
   .row[.content[
@@ -321,12 +322,12 @@ eppo_token <- pestr::create_eppo_token("your_eppo_token")
 ```{r eval = FALSE, echo = TRUE}
 pests_query <- c("Xylella", "suzuki")
 hosts_query <- c("Triricum durum", "Abies al")
-pests_names <- pestr::eppo_names_tables(pests_query)
-hosts_names <- pestr::eppo_names_tables(hosts_query)
-hosts       <- pestr::eppo_tabletools_hosts(pests_query, token = eppo_token)
-pests       <- pestr::eppo_tabletools_pests(hosts_query, token = eppo_token)
-category    <- pestr::eppo_tabletools_cat(pests_query, token = eppo_token)
-taxonomy    <- pestr::eppo_tabletools_taxo(pests_query, token = eppo_token)
+pests_names <- eppo_names_tables(pests_query)
+hosts_names <- eppo_names_tables(hosts_query)
+hosts       <- eppo_tabletools_hosts(pests_query, token = eppo_token)
+pests       <- eppo_tabletools_pests(hosts_query, token = eppo_token)
+category    <- eppo_tabletools_cat(pests_query, token = eppo_token)
+taxonomy    <- eppo_tabletools_taxo(pests_query, token = eppo_token)
 ```
   ]]
 ]]]
@@ -355,10 +356,10 @@ class: split-10 with-border border-white
 .column.bg-indigo[.content[
   .split-two.border-white[
   .row[.content.vmiddle[  
-  .font_large[`eppo_names_tables` .white[function return 4 tables: *exists_in_DB*, *not_in_DB*, *pref_names* and *all_associated_names*.]]
+  .font_large[`eppo_names_tables` .white[function return 4 tables: `exists_in_DB`, `not_in_DB`, `pref_names` and `all_associated_names`.]]
    ]]
   .row[.content.vmiddle[
-  .font_large[`eppo\_tabletools\_\*` .white[functions family returns always two tables: *long_table* and *compact_table*. The structure of *long_table* is different for different outputs since we are dealing with different data. *compact_table* contains the same data as *long_table* but condensed to one row per *eppocode*.]]
+  .font_large[`eppo\_tabletools\_\*` .white[functions family returns always two tables: `long_table` and `compact_table`. The structure of `long_table` is different for different outputs since we are dealing with different data. `compact_table` contains the same data as `long_table` but condensed to one row per `eppocode`.]]
   ]]]]]
 
 
@@ -427,7 +428,7 @@ head(taxonomy$long_table, 10) %>%
 ```{r eval = TRUE, echo = TRUE}
 head(category$long_table, 10) %>%
   flextable::flextable() %>% #<< 
-  flextable::bg(bg = "white", part = "all") 
+  flextable::bg(bg = "white", part = "all") #<<
 ```
 
 ---
@@ -531,30 +532,31 @@ class: split-10 with-border border-white
 ---
 
 ```{r eval = FALSE, echo = TRUE}
+library("tidyverse") #<<
 taxons_heatmap <- function(query, eppo_token) {
-  query_names <- pestr::eppo_names_tables(query)
+  query_names <- eppo_names_tables(query)
   
   hosts_eppocode <- query_names$pref_names %>%
-    dplyr::filter(grepl(paste0("^", query), fullname)) %>%
+    filter(grepl(paste0("^", query), fullname)) %>%
     .$eppocode
   
-  query_pests <- pestr::eppo_tabletools_pests(token = eppo_token, 
+  query_pests <- eppo_tabletools_pests(token = eppo_token, 
                   raw_eppocodes = hosts_eppocode, use_raw_codes = TRUE)
   
   unique_pests <- query_pests$long_table %>%
-    dplyr::filter(!is.na(pests_eppocode)) %>%
+    filter(!is.na(pests_eppocode)) %>%
     .$pests_eppocode %>%
     unique
   
-  pest_taxonomy <- pestr::eppo_tabletools_taxo(token = eppo_token,
+  pest_taxonomy <- eppo_tabletools_taxo(token = eppo_token,
                      raw_eppocodes = unique_pests,
                      use_raw_codes = TRUE)
   
   taxon_plot_df <- pest_taxonomy$compact_table %>%
-    dplyr::rename(pests_eppocode = eppocode) %>%
-    dplyr::left_join(query_pests$long_table) %>%
-    dplyr::group_by(eppocode) %>%
-    dplyr::count(taxonomy) %>%
+    rename(pests_eppocode = eppocode) %>%
+    left_join(query_pests$long_table) %>%
+    group_by(eppocode) %>%
+    count(taxonomy) %>%
     group_by(n_taxons = cut(n, breaks = c(seq(1,51,2), Inf), right = FALSE))
   
   return(taxon_plot_df)
@@ -664,7 +666,7 @@ class: center, middle
 
 # Thank you for listening!
 
-Slides created via the R packages:
+Slides created via the `r icon::fa_r_project(colour = "#384CB7")` packages:
 
 <a href="https://github.com/yihui/xaringan"><img src="https://raw.githubusercontent.com/rstudio/hex-stickers/master/PNG/xaringan.png" height="100 px" align="center" alt="xaringan" /></a><a href="https://github.com/gadenbuie/xaringanthemer"><img src="https://raw.githubusercontent.com/gadenbuie/xaringanthemer/master/man/figures/logo.png" height="100 px" align="center" alt="xaringan themer" /></a><a href="https://davidgohel.github.io/flextable/"><img src="https://raw.githubusercontent.com/davidgohel/flextable/master/man/figures/logo.png" height="100 px" align="center" alt="flextable" /></a><img src="https://raw.githubusercontent.com/rstudio/hex-stickers/master/PNG/knitr.png" height="100 px" align="center" alt="knitr" /></a><a href="https://rmarkdown.rstudio.com"><img src="https://raw.githubusercontent.com/rstudio/hex-stickers/master/PNG/rmarkdown.png" height="100 px" align="center" alt="rmarkdown" /></a>
 
