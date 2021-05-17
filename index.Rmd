@@ -102,7 +102,7 @@ class: shuriken-200 white
 # .white[Spreadsheet]
 ]]
 .blade4.bg-orange[.content.sideways-rl.center[
-# .white[Go to the next next link&nbsp;]
+# .white[Go to the next link&nbsp;&nbsp;]
 ]]
 .hole.bg-black[.content.center.vmiddle[
 {{content}}
