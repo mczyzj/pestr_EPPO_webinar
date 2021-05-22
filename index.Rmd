@@ -324,10 +324,10 @@ pests_query <- c("Xylella", "suzuki")
 hosts_query <- c("Triricum durum", "Abies al")
 pests_names <- eppo_names_tables(pests_query)
 hosts_names <- eppo_names_tables(hosts_query)
-hosts       <- eppo_tabletools_hosts(pests_query, token = eppo_token)
-pests       <- eppo_tabletools_pests(hosts_query, token = eppo_token)
-category    <- eppo_tabletools_cat(pests_query, token = eppo_token)
-taxonomy    <- eppo_tabletools_taxo(pests_query, token = eppo_token)
+hosts       <- eppo_tabletools_hosts(pests_names, token = eppo_token)
+pests       <- eppo_tabletools_pests(hosts_names, token = eppo_token)
+category    <- eppo_tabletools_cat(pests_names, token = eppo_token)
+taxonomy    <- eppo_tabletools_taxo(pests_names, token = eppo_token)
 ```
   ]]
 ]]]
