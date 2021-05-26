@@ -141,8 +141,9 @@ class: split-three white
 .row.bg-white[.content.center[
 .pull-left[<font size="9" color="#0072B2">Do not show this to your boss!</font>]
 
-.right[![GitHub Pricing](img/git-hub-pricing.png)]
-]]
+
+.right[![GitHub Pricing](img/git-hub-pricing.png)]]
+]
 
 --
 .row.bg-green[.content.vmiddle.center[
