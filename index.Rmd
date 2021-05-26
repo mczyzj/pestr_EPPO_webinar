@@ -141,8 +141,9 @@ class: split-three white
 .row.bg-white[.content.center[
 .pull-left[<font size="9" color="#0072B2">Do not show this to your boss!</font>]
 
-.right[![GitHub Pricing](img/git-hub-pricing.png)]
-]]
+
+.right[![GitHub Pricing](img/git-hub-pricing.png)]]
+]
 
 --
 .row.bg-green[.content.vmiddle.center[
@@ -624,7 +625,7 @@ layout: true
 class: split-10 with-border border-white
 
 .column.bg-main1[.content.sideways-rl.center[
-# Take home messages.
+# Take home messages
 ]]
 
 .column.bg-indigo[.content[
